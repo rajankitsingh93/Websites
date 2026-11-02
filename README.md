@@ -1,28 +1,24 @@
 # Ankit's Website
 
-A public home for your web projects, with a private owner sign-in to add, edit, or remove links. Project data is shared through Supabase, so a change made from the admin panel appears for every visitor.
+A public gallery of web projects. Visitors can browse, search, and filter the links; there is no sign-in or project manager.
 
-## Set up your owner-only project manager
+## Add a project
 
-1. Create a project at [supabase.com](https://supabase.com/).
-2. In the Supabase SQL Editor, run the contents of [`schema.sql`](./schema.sql).
-3. In Supabase **Authentication → Providers**, keep Email enabled. In **Authentication → Settings**, disable new user sign-ups so only the account you create can sign in.
-4. Create your owner account under **Authentication → Users → Add user**. Copy its user UUID.
-5. In the SQL Editor, run `insert into public.project_shelf_admins (user_id) values ('YOUR-AUTH-USER-UUID');`, replacing the placeholder with that UUID.
-6. In **Project Settings → API**, copy the Project URL and the **anon/public** key. In the GitHub repository, open **Settings → Secrets and variables → Actions → Variables** and add:
+Ask your coding assistant to add the URL to the `projects` array near the top of [`app.js`](./app.js), with a project name, a short description, and a category. Each project follows this shape:
 
-   - `SUPABASE_URL` — the Project URL.
-   - `SUPABASE_ANON_KEY` — the anon/public key.
+```js
+{
+  name: "My project",
+  url: "https://example.com/",
+  description: "A short introduction to what the project does.",
+  category: "Web app"
+}
+```
 
-   The anon key is meant to be public; the database policies restrict project changes to your admin account. **Never** use or publish a `service_role` key.
+Commit and push the change to `main`. If GitHub Pages is enabled for this repository with GitHub Actions, the site deploys from the updated code. No database or admin account is needed.
 
-## Publish on GitHub Pages
+## Preview locally
 
-1. In the GitHub repository, open **Settings → Pages** and select **GitHub Actions** as the build and deployment source. This one-time setting is required before the workflow can deploy.
-2. Push to `main` (or re-run **Deploy website to GitHub Pages** from the **Actions** tab). If an earlier run failed before you selected GitHub Actions, it will not restart automatically; this new push starts a fresh deployment. The workflow publishes the site at `https://rajankitsingh93.github.io/Websites/` and reads the Supabase values from the repository Actions variables above.
-3. In Supabase **Authentication → URL Configuration**, set the site URL to `https://rajankitsingh93.github.io/Websites/` and add that same URL to the allowed redirect URLs.
-4. Visit the public URL. Anyone can browse projects; only your signed-in admin account can add, edit, or remove them using **Manage projects**.
+Open a terminal in this folder and run `python -m http.server 8000`, then visit `http://localhost:8000`.
 
-For a local preview, open a terminal in this folder and run `python -m http.server 8000`, then visit `http://localhost:8000`. To use the manager locally, put the Supabase URL and anon key in `config.js`; leave those values out of commits if you prefer to keep the repository config empty.
-
-If you change the public URL or Supabase project, update the matching GitHub Actions variables and Supabase URL configuration. Project links must use `http://` or `https://`.
+The Google Search Console verification tag is in the page `<head>` in [`index.html`](./index.html). Verification works once the site is deployed at its public URL.
