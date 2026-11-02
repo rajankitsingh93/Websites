@@ -18,9 +18,10 @@ A public home for your web projects, with a private owner sign-in to add, edit, 
 
 ## Publish on GitHub Pages
 
-1. Push to `main` (or manually run **Deploy website to GitHub Pages** from the **Actions** tab). The workflow enables GitHub Pages and publishes the site at `https://rajankitsingh93.github.io/Websites/`. It reads the Supabase values from the repository Actions variables above.
-2. In Supabase **Authentication → URL Configuration**, set the site URL to `https://rajankitsingh93.github.io/Websites/` and add that same URL to the allowed redirect URLs.
-3. Visit the public URL. Anyone can browse projects; only your signed-in admin account can add, edit, or remove them using **Manage projects**.
+1. In the GitHub repository, open **Settings → Pages** and select **GitHub Actions** as the build and deployment source. This one-time setting is required before the workflow can deploy.
+2. Push to `main` (or re-run **Deploy website to GitHub Pages** from the **Actions** tab). The workflow publishes the site at `https://rajankitsingh93.github.io/Websites/` and reads the Supabase values from the repository Actions variables above.
+3. In Supabase **Authentication → URL Configuration**, set the site URL to `https://rajankitsingh93.github.io/Websites/` and add that same URL to the allowed redirect URLs.
+4. Visit the public URL. Anyone can browse projects; only your signed-in admin account can add, edit, or remove them using **Manage projects**.
 
 For a local preview, open a terminal in this folder and run `python -m http.server 8000`, then visit `http://localhost:8000`. To use the manager locally, put the Supabase URL and anon key in `config.js`; leave those values out of commits if you prefer to keep the repository config empty.
 
