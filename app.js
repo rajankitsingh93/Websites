@@ -12,6 +12,16 @@ const projectForm = document.querySelector("#project-form");
 const adminProjectList = document.querySelector("#admin-project-list");
 const toast = document.querySelector("#toast");
 
+const curatedProjects = [
+  {
+    id: "airdroppulse",
+    name: "Airdroppulse",
+    url: "https://airdroppulse.rajankitsingh93.workers.dev/",
+    description: "Send files, photos, videos, and messages between your devices using a temporary code—no account needed.",
+    category: "File sharing"
+  }
+];
+
 let supabase;
 let projects = [];
 let isAdmin = false;
@@ -89,8 +99,9 @@ function renderProjects() {
 
 function renderAdminProjects() {
   adminProjectList.replaceChildren();
-  document.querySelector("#admin-project-count").textContent = String(projects.length);
-  for (const project of projects) {
+  const managedProjects = projects.filter((project) => project.managed);
+  document.querySelector("#admin-project-count").textContent = String(managedProjects.length);
+  for (const project of managedProjects) {
     const item = createElement("li", "admin-project-item");
     const detail = createElement("div", "admin-project-detail");
     detail.append(createElement("strong", "", project.name), createElement("span", "", project.url));
@@ -131,7 +142,12 @@ async function loadProjects() {
     throw error;
   }
 
-  projects = data;
+  const managedProjects = data.map((project) => ({ ...project, managed: true }));
+  const managedUrls = new Set(managedProjects.map((project) => project.url));
+  projects = [
+    ...curatedProjects.filter((project) => !managedUrls.has(project.url)),
+    ...managedProjects
+  ];
   connectionStatus.hidden = true;
   renderProjects();
   if (isAdmin) renderAdminProjects();
@@ -338,8 +354,9 @@ projectForm.addEventListener("submit", async (event) => {
 
 async function start() {
   if (!config.supabaseUrl || !config.supabaseAnonKey) {
-    connectionStatus.textContent = "The collection is not connected yet. Add your Supabase URL and public anon key in config.js to make it live.";
-    connectionStatus.classList.add("is-error");
+    projects = curatedProjects;
+    connectionStatus.hidden = true;
+    renderProjects();
     return;
   }
 
