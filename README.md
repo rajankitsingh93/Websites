@@ -1,4 +1,4 @@
-# My Site Shelf
+# Ankit's Website
 
 A public home for your web projects, with a private owner sign-in to add, edit, or remove links. Project data is shared through Supabase, so a change made from the admin panel appears for every visitor.
 
